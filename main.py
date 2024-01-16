@@ -1,10 +1,28 @@
 from tkinter import *
 from tkinter import ttk
+from pynput.mouse import Controller, Button
+
+mouse = Controller()
+mouseFlag = False
+
+def simulate_click():
+    while not mouseFlag:
+        mouse.click(Button.left, 1)
+
+def infiniteClick(event=None):
+    global mouseFlag
+    mouseFlag = False
+    window.after(100, simulate_click)
+
+def stop_click(event=None):
+    window.destroy()
 
 # create window and give it a title
 window = Tk()
 window.title("Python Auto Clicker")
 window.iconphoto(True, PhotoImage(file="M:\programs\python\clickauto\mouseimg.png"))
+window.bind("<F6>", infiniteClick)
+window.bind("<F7>", stop_click)
 
 style = ttk.Style()
 style.configure("TRadiobutton")
@@ -93,13 +111,13 @@ var_repeat.set(default_radio)
 
 # buttons
 button_frame = Frame(frame)
-button_frame.grid(row = 2, column = 0, columnspan= 2)
-start_button = ttk.Button(button_frame, text="Start")
-start_button.grid(row = 0, column = 0)
-stop_button = ttk.Button(button_frame, text="Stop")
-stop_button.grid(row = 0, column = 1)
+button_frame.grid(row = 2, column = 0, columnspan= 2, padx = 10, pady = 10)
+start_button = ttk.Button(button_frame, text="Start (F6)", command=infiniteClick)
+start_button.grid(row = 0, column = 0, ipadx = 10, ipady= 20, padx=(0, 5))
+stop_button = ttk.Button(button_frame, text="Stop (F7)", command=window.destroy)
+stop_button.grid(row = 0, column = 1, ipadx = 10, ipady= 20, padx=(5, 5))
 hotkey_button = ttk.Button(button_frame, text="Hotkey Settings")
-hotkey_button.grid(row = 0, column = 2)
+hotkey_button.grid(row = 0, column = 2, ipadx = 10, ipady= 20, padx=(5, 0))
 
 # padding 
 for widget in click_interval_frame.winfo_children():
